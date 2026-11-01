@@ -1,0 +1,17 @@
+---
+- name: Configure Kubernetes worker nodes
+  hosts: role_worker
+  become: true
+
+  roles:
+    - node-setup
+    - node-exporter
+
+- name: Generate monitoring configurations
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  roles:
+    - prometheus-config
+    - alertmanager-config

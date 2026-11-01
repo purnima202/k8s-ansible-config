@@ -1,0 +1,6 @@
+---
+- name: Generate Alertmanager configuration
+  ansible.builtin.template:
+    src: alertmanager.yml.j2
+    dest: "{{ playbook_dir }}/../generated/alertmanager.yml"
+    mode: "0600"

@@ -1,0 +1,2 @@
+---
+slack_webhook_url: "{{ lookup('env', 'SLACK_WEBHOOK_URL') | default('https://hooks.slack.com/services/REPLACE_ME', true) }}"

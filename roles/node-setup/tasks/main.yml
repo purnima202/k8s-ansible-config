@@ -1,0 +1,42 @@
+---
+- name: Update Ubuntu package cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+
+- name: Install security and system packages
+  ansible.builtin.package:
+    name:
+      - curl
+      - wget
+      - unzip
+      - jq
+      - ca-certificates
+    state: present
+
+- name: Ensure containerd is installed
+  ansible.builtin.package:
+    name: containerd
+    state: present
+
+- name: Enable containerd service
+  ansible.builtin.service:
+    name: containerd
+    state: started
+    enabled: true
+
+- name: Apply kernel hardening settings
+  ansible.posix.sysctl:
+    name: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+    reload: true
+  loop:
+    - { key: "net.ipv4.ip_forward", value: "1" }
+    - { key: "net.ipv4.conf.all.accept_redirects", value: "0" }
+    - { key: "net.ipv4.conf.all.send_redirects", value: "0" }
+
+- name: Verify containerd
+  ansible.builtin.command: containerd --version
+  changed_when: false

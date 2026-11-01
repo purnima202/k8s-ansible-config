@@ -1,0 +1,18 @@
+---
+- name: Create generated configuration directory
+  ansible.builtin.file:
+    path: "{{ playbook_dir }}/../generated"
+    state: directory
+    mode: "0755"
+
+- name: Generate Prometheus configuration
+  ansible.builtin.template:
+    src: prometheus.yml.j2
+    dest: "{{ playbook_dir }}/../generated/prometheus.yml"
+    mode: "0644"
+
+- name: Generate Prometheus alert rules
+  ansible.builtin.template:
+    src: alerts.yml.j2
+    dest: "{{ playbook_dir }}/../generated/alerts.yml"
+    mode: "0644"

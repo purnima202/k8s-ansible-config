@@ -1,0 +1,20 @@
+groups:
+  - name: kubernetes-alerts
+    rules:
+      - alert: PodRestartHigh
+        expr: increase(kube_pod_container_status_restarts_total[5m]) > 3
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: Kubernetes pod restarting frequently
+          description: Pod {{ '{{' }} $labels.pod {{ '}}' }} restarted more than 3 times in 5 minutes.
+
+      - alert: NodeExporterDown
+        expr: up{job="kubernetes-nodes"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Node Exporter is down
+          description: Node Exporter is not responding.
