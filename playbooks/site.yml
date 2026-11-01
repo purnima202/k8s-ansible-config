@@ -1,6 +1,6 @@
 ---
 - name: Configure Kubernetes worker nodes
-  hosts: role_worker
+  hosts: env_dev
   become: true
 
   roles:
